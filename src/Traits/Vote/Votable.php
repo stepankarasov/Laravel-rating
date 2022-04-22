@@ -13,17 +13,17 @@ trait Votable
 
     public function totalVotesCount()
     {
-        return $this->votes()->count();
+        return $this->votes()->typeVote()->count();
     }
 
     public function upVotesCount()
     {
-        return $this->votes()->where('value', 1)->count();
+        return $this->votes()->typeVote()->where('value', 1)->count();
     }
 
     public function downVotesCount()
     {
-        return $this->votes()->where('value', 0)->count();
+        return $this->votes()->typeVote()->where('value', 0)->count();
     }
 
     public function votesDiff()

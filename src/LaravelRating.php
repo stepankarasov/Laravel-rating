@@ -43,24 +43,20 @@ class LaravelRating
 
     public function isRated($user, $rateable, $type)
     {
-        $rating = $user->{$this->resolveTypeRelation($type)}()
+        return $user->{$this->resolveTypeRelation($type)}()
                         ->where('rateable_id', $rateable->id)
                         ->where('rateable_type', $this->getRateableByClass($rateable))
                         ->where('type', $type)
-                        ->first();
-
-        return $rating != null;
+                        ->exists();
     }
 
     public function getRatingValue($user, $rateable, $type)
     {
-        $rating = $user->{$this->resolveTypeRelation($type)}()
+        return $user->{$this->resolveTypeRelation($type)}()
                         ->where('rateable_id', $rateable->id)
                         ->where('rateable_type', $this->getRateableByClass($rateable))
                         ->where('type', $type)
-                        ->first();
-
-        return $rating != null ? $rating->value : null;
+                        ->value('value');
     }
 
     private function resolveTypeRelation($type)

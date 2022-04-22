@@ -8,22 +8,22 @@ trait Votable
 {
     public function votes()
     {
-        return $this->morphMany(Rating::class, 'rateable');
+        return $this->morphMany(Rating::class, 'rateable')->typeVote();
     }
 
     public function totalVotesCount()
     {
-        return $this->votes()->typeVote()->count();
+        return $this->votes()->count();
     }
 
     public function upVotesCount()
     {
-        return $this->votes()->typeVote()->where('value', 1)->count();
+        return $this->votes()->where('value', 1)->count();
     }
 
     public function downVotesCount()
     {
-        return $this->votes()->typeVote()->where('value', 0)->count();
+        return $this->votes()->where('value', 0)->count();
     }
 
     public function votesDiff()

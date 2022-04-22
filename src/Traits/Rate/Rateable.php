@@ -8,16 +8,16 @@ trait Rateable
 {
     public function ratings()
     {
-        return $this->morphMany(Rating::class, 'rateable');
+        return $this->morphMany(Rating::class, 'rateable')->typeRate();
     }
 
     public function ratingsAvg()
     {
-        return round($this->ratings()->typeRate()->avg('value') ?? 0,2);
+        return round($this->ratings()->avg('value') ?? 0,2);
     }
 
     public function ratingsCount()
     {
-        return $this->ratings()->typeRate()->count();
+        return $this->ratings()->count();
     }
 }

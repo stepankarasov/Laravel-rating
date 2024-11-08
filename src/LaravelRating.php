@@ -70,6 +70,36 @@ class LaravelRating
         return $lookup[$type];
     }
 
+    /**
+     * Get Bayesian rating
+     *
+     * @param $answers object
+     *
+     * @return array
+     */
+    public function getBayesianRating( $answers ) {
+        foreach ( $answers as $answer ) {
+            $votes                   = $this->getVotes( $answer->id );
+            $average_votes           = $this->getAverageVotes( $answers );
+            $numerator               = ( $average_votes * $this->getAverageRating( $answers ) ) +
+                ( $votes * $this->getRating( $answer->id ) );
+            $denominator             = $average_votes + $votes;
+            $bayesian_rating         = ( $denominator > 0 ) ? $numerator / $denominator : 0;
+            $answer->bayesian_rating = $bayesian_rating;
+            $answer->must_update     = 0;
+            $answer->save();
+        }
+        if ( $answers ) {
+            $count         = 1;
+            $answers_1 = $this->getAnswers( $answers[0]->question_id, 'bayesian_rating', 'desc' );
+            foreach ( $answers_1 as $value ) {
+                $value->rank = $count;
+                $value->save();
+                $count ++;
+            }
+        }
+    }
+
     public function resolveRatedItems($items)
     {
         $collection = collect();
